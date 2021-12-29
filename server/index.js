@@ -7,6 +7,7 @@ dotenv.config();
 import postRoutes from "./routes/post.js";
 
 const PORT = process.env.PORT || 8000;
+// const secret = "mongodb+srv://howardmui0209:howardmui0209@cluster0.ywmsl.mongodb.net/BlogRedux?retryWrites=true&w=majority";
 
 mongoose
   .connect(process.env.MONGONDB_SECRET)
