@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 
 // middleware
 
-app.use(express.json());
+app.use(express.json({ limit: "2100000kb" }));
 app.use(cors());
 app.use("/post", postRoutes);
 

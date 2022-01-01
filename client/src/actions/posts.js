@@ -1,7 +1,10 @@
 import * as api from "../api";
 // import all things from the actions as api
+// able the use the variable in api
 
 // Action Creators
+// 因為axios 係 async fn ，Thunk 要係fn 後邊再加一個async fn 去dispatch 佢
+// Thunk Motivation
 export const getPosts = () => async (dispatch) => {
   try {
     // 係api 拎到response，係response 入邊一定有data object，data = posts

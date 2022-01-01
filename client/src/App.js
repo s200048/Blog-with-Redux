@@ -19,6 +19,8 @@ const App = () => {
   const dispatch = useDispatch();
   // console.log(classes);
 
+  // console.log(getPosts);
+
   useEffect(() => {
     dispatch(getPosts());
   }, []);
