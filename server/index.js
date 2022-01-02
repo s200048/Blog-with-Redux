@@ -10,14 +10,8 @@ const PORT = process.env.PORT || 8000;
 
 mongoose
   .connect(process.env.MONGONDB_SECRET)
-  .then(() =>
-    app.listen(PORT, () => console.log("MongooseDB is running on Port 8000"))
-  )
+  .then(() => app.listen(PORT, () => console.log("MongooseDB is running on Port 8000")))
   .catch((err) => console.log(err));
-
-app.get("/", (req, res) => {
-  res.send("Hello");
-});
 
 // middleware
 
