@@ -27,15 +27,15 @@ const App = () => {
     <Container maxWidth="lg">
       <AppBar className={classes.appBar} position="static" color="ingerit">
         <Typography align="center" variant="h2">
-          Memories
+          My Blog
         </Typography>
         <img className={classes.image} src={memories} alt="memories" height="60" />
       </AppBar>
       <Grow in>
         <Container>
-          <Grid container justify="space-between" alignItems="stretch" spacing={4}>
+          <Grid container className={classes.mainContainer} justify="space-between" alignItems="stretch" spacing={4}>
             <Grid item xd={12} sm={7}>
-              <Posts setCurrentId={setCurrentId} />
+              <Posts currentId={currentId} setCurrentId={setCurrentId} />
             </Grid>
             <Grid item xd={12} sm={4}>
               <Form currentId={currentId} setCurrentId={setCurrentId} />
