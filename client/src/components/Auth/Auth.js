@@ -8,17 +8,25 @@ import Icon from "./icon";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
+let initState = { firstname: "", lastname: "", email: "", password: "", confirmPassword: "" };
+
 const Auth = () => {
-  const [user, setUser] = useState(false);
+  const [formData, setFormData] = useState(initState);
   const [isSignup, setSignup] = useState(false);
   const [showPw, setShowPw] = useState(false);
-  const state = null;
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleSubmit = () => {};
-  const handleChange = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+  const handleChange = (e) => {
+    console.log(e.target.name);
+    console.log(e.target.value);
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   const handleShowPw = () => setShowPw((prev) => !prev);
   const switchMode = () => {
     setSignup(!isSignup);
@@ -57,7 +65,7 @@ const Auth = () => {
             {isSignup && (
               <>
                 <Input name="FirstName" label="First Name" handleChange={handleChange} autoFocus half></Input>
-                <Input name="FirstName" label="First Name" handleChange={handleChange} half></Input>
+                <Input name="LastName" label="Last Name" handleChange={handleChange} half></Input>
               </>
             )}
             <Input name="email" label="Email Address" handleChange={handleChange} type="email"></Input>
