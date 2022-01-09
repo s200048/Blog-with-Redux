@@ -7,6 +7,7 @@ import { GoogleLogin } from "react-google-login";
 import Icon from "./icon";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { signIn, signUp } from "../../actions/auth";
 
 let initState = { firstname: "", lastname: "", email: "", password: "", confirmPassword: "" };
 
@@ -20,11 +21,17 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    // console.log(formData);
+    if (isSignup) {
+      dispatch(signUp(formData, history));
+    } else {
+      dispatch(signIn(formData, history));
+    }
   };
+
   const handleChange = (e) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
+    // console.log(e.target.name);
+    // console.log(e.target.value);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleShowPw = () => setShowPw((prev) => !prev);
@@ -64,8 +71,8 @@ const Auth = () => {
           <Grid container spacing={2}>
             {isSignup && (
               <>
-                <Input name="FirstName" label="First Name" handleChange={handleChange} autoFocus half></Input>
-                <Input name="LastName" label="Last Name" handleChange={handleChange} half></Input>
+                <Input name="firstname" label="First Name" handleChange={handleChange} autoFocus half></Input>
+                <Input name="lastname" label="Last Name" handleChange={handleChange} half></Input>
               </>
             )}
             <Input name="email" label="Email Address" handleChange={handleChange} type="email"></Input>

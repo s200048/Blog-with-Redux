@@ -17,7 +17,7 @@ export const getPosts = async (req, res) => {
 export const createPost = async (req, res) => {
   const post = req.body;
 
-  const newPost = new PostMessage(post);
+  const newPost = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() });
 
   try {
     await newPost.save();
@@ -34,8 +34,7 @@ export const updatePosts = async (req, res) => {
   const post = req.body;
 
   try {
-    if (!mongoose.Types.ObjectId.isValid(_id))
-      return res.status(404).send("No post with that id");
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("No post with that id");
 
     let updatedPost = await PostMessage.findOneAndUpdate(_id, post, {
       new: true,
@@ -50,8 +49,7 @@ export const deletePost = async (req, res) => {
   const { id: _id } = req.params;
 
   try {
-    if (!mongoose.Types.ObjectId.isValid(_id))
-      return res.status(404).send("No post with that id");
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("No post with that id");
 
     const deletedPost = await PostMessage.deleteOne({ id: _id });
     res.json(`${deletedPost} has been deleted`);
@@ -62,21 +60,36 @@ export const deletePost = async (req, res) => {
 
 export const likePost = async (req, res) => {
   const { id: _id } = req.params;
-  console.log(_id);
+  // console.log(_id);
+  console.log("LikePost: " + req.userId);
 
   try {
-    if (!mongoose.Types.ObjectId.isValid(_id))
-      return res.status(404).send("No post with that id");
+    if (!req.userId) return res.json({ message: "Unauthenticated" });
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("No post with that id");
 
     const post = await PostMessage.findById(_id);
     // console.log(post._id);
     // console.log(post);
 
-    const updatedPost = await PostMessage.findOneAndUpdate(
-      { _id: _id },
-      { likeCount: post.likeCount + 1 },
-      { new: true }
-    );
+    // 對下個post.like 入邊有冇login 果個user like 過
+    const index = post.likes.findIndex((id) => id === String(req.userId));
+    console.log(index);
+
+    if (index === -1) {
+      //like the post (user 冇like 過)
+      post.likes.push(req.userId);
+      console.log(0);
+    } else {
+      //dislike the post (user like 過)
+      // remove Id from array
+      console.log(1);
+      post.likes = post.likes.filter((id) => id !== String(req.userId));
+    }
+
+    const updatedPost = await PostMessage.findOneAndUpdate({ _id: _id }, post, {
+      new: true,
+    });
     console.log(updatedPost._id);
     res.json(updatedPost);
   } catch (err) {

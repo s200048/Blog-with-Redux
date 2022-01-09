@@ -1,12 +1,16 @@
 import jwt from "jsonwebtoken";
 
-const secret = "test";
+// Secret 放係 第2個params (secretOrPublicKey) 係冇用
+// const secret = process.env.JWT_SECRET;
 
 const auth = async (req, res, next) => {
   try {
-    console.log(req.header);
+    // console.log(req.headers.authorization);
+
     //淨係想要個token，同埋係要token first position in array
     const token = req.headers.authorization.split(" ")[1];
+    // console.log(token);
+
     // 用嚟分辨係JWT 定 OAuth，細過500 係JWT
     const isCustomAuth = token.length < 500;
 
@@ -14,15 +18,17 @@ const auth = async (req, res, next) => {
     let decodedData;
 
     if (token && isCustomAuth) {
-      decodedData = jwt.verify(token, secret);
-      console.log(decodedData);
+      // 噉樣放就唔會有 JsonWebTokenError: secret or public key must be provided error
+      decodedData = jwt.verify(token, process.env.JWT_SECRET);
+      // console.log(decodedData);
 
       req.userId = decodedData?.id;
+      console.log("req.userId: " + req.userId);
     } else {
       decodedData = jwt.decode(token);
-      console.log(decodedData);
 
       req.userId = decodedData?.sub;
+      console.log("req.userId: " + req.userId);
     }
 
     next();
