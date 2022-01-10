@@ -1,7 +1,7 @@
 import { FETCH_ALL, CREATE, UPDATE, DELETE } from "../constants/actionTypes";
 
 export default (posts = [], action) => {
-  // console.log(action);
+  console.log(action);
   // people prefer switch statement
   switch (action.type) {
     case FETCH_ALL:

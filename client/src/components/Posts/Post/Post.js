@@ -15,20 +15,20 @@ const Post = ({ post, currentId, setCurrentId }) => {
 
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("profile"));
-  // useEffect(() => {
-  //   dispatch(getPosts());
-  // }, [currentId, dispatch]);
 
-  // let getThePost = () => {
-  //   console.log(dispatch(getPosts()));
-  //   console.log(getPosts());
-  // };
+  let likeHandler = () => {
+    if (!user) {
+      alert(`You need to login for liking the post`);
+    } else {
+      dispatch(likePost(post._id));
+    }
+  };
 
-  // let clickHandler = () => {
-  //   setCurrentId(post._id);
-  //   dispatch(likePost(post._id));
-  //   setCurrentId(null);
-  // };
+  let deletedHandler = () => {
+    if (window.confirm(`Are you sure to delete ${post.title}?`)) {
+      dispatch(deletePost(post._id));
+    }
+  };
 
   const Likes = () => {
     if (post.likes.length > 0) {
@@ -82,13 +82,12 @@ const Post = ({ post, currentId, setCurrentId }) => {
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" disable={!user?.result} onClick={() => dispatch(likePost(post._id))}>
-          {/* <ThumbUpAltIcon fontSize="small" /> */}
+        <Button size="small" color="primary" disable={!user?.result} onClick={likeHandler}>
           <Likes />
           {post.likeCount}
         </Button>
         {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
-          <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
+          <Button size="small" color="primary" onClick={deletedHandler}>
             <DeleteIcon fontSize="small" />
             Delete
           </Button>

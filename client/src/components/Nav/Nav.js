@@ -16,6 +16,14 @@ const Nav = () => {
   console.log(user);
 
   const logout = () => {
+    if (window.confirm("Are you sure to logout?")) {
+      dispatch({ type: "LOGOUT" });
+      history.push("/");
+      setUser(null);
+    }
+  };
+
+  const forceLogout = () => {
     dispatch({ type: "LOGOUT" });
     history.push("/");
     setUser(null);
@@ -26,7 +34,12 @@ const Nav = () => {
 
     if (token) {
       const decodedToken = decode(token);
-      if (decodedToken.exp * 1000 < new Date().getTime()) return logout();
+      // console.log(decodedToken.iat);
+      // console.log(decodedToken.exp);
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
+        alert("Token expired You need to login again.");
+        return forceLogout();
+      }
     }
 
     setUser(JSON.parse(localStorage.getItem("profile")));

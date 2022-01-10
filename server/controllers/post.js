@@ -30,16 +30,25 @@ export const createPost = async (req, res) => {
 export const updatePosts = async (req, res) => {
   // console.log(req.params);
   // console.log(req.body);
-  const { id: _id } = req.params;
+  const { id } = req.params;
   const post = req.body;
+  console.log(req.params.id);
+  // console.log(post);
+
+  // const { creator, title, message, likes, tags, selectedFile } = req.body;
 
   try {
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("No post with that id");
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send("No post with that id");
 
-    let updatedPost = await PostMessage.findOneAndUpdate(_id, post, {
-      new: true,
-    });
-    res.status(200).json(updatedPost);
+    // const updatePost = { creator, title, message, tags, likes, selectedFile, _id: id };
+
+    await PostMessage.findByIdAndUpdate(id, post, { new: true });
+
+    // let updatedPost = await PostMessage.findOneAndUpdate({ id: _id }, post, {
+    //   new: true,
+    // });
+    console.log(post);
+    res.status(200).json(post);
   } catch (err) {
     console.log(err);
   }
@@ -74,23 +83,23 @@ export const likePost = async (req, res) => {
 
     // 對下個post.like 入邊有冇login 果個user like 過
     const index = post.likes.findIndex((id) => id === String(req.userId));
-    console.log(index);
+    // console.log(index);
 
     if (index === -1) {
       //like the post (user 冇like 過)
       post.likes.push(req.userId);
-      console.log(0);
+      // console.log(0);
     } else {
       //dislike the post (user like 過)
       // remove Id from array
-      console.log(1);
+      // console.log(1);
       post.likes = post.likes.filter((id) => id !== String(req.userId));
     }
 
     const updatedPost = await PostMessage.findOneAndUpdate({ _id: _id }, post, {
       new: true,
     });
-    console.log(updatedPost._id);
+    // console.log(updatedPost);
     res.json(updatedPost);
   } catch (err) {
     console.log(err);

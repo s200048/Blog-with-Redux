@@ -15,7 +15,7 @@ const Form = ({ currentId, setCurrentId }) => {
   // console.log(classes);
 
   // console.log(post);
-
+  // console.log(currentId);
   useEffect(() => {
     if (post) setPostData(post);
   }, [post]);
@@ -24,7 +24,8 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
 
     if (currentId) {
-      dispatch(updatePost({ ...postData, name: user?.result?.name }));
+      console.log(postData);
+      if (window.confirm(`Are you confirmed to update?`)) return dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
     } else {
       dispatch(createPost({ ...postData, name: user?.result?.name }));
     }

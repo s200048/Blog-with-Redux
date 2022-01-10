@@ -57,11 +57,13 @@ export const signin = async (req, res) => {
     // console.log(isPwCorrect);
 
     //password wong
-    if (!isPwCorrect) return res.status(400).json({ message: "Password incorrect." });
+    if (!isPwCorrect) {
+      return res.status(404).json({ message: "Password incorrect." });
+    }
 
     //gen JWT to localhost and save
     const tokenObject = { id: existUser._id, email: existUser.email };
-    const token = jwt.sign(tokenObject, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(tokenObject, process.env.JWT_SECRET, { expiresIn: "30m" });
     res.status(200).json({ result: existUser, token });
     //history
   } catch (err) {
