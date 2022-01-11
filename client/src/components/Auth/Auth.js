@@ -57,6 +57,7 @@ const Auth = () => {
   };
   const googleError = (err) => {
     console.log(err);
+    alert("Google sign in failed.");
     console.log("Google Login failed.");
   };
 
