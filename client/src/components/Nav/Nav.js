@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useStyles from "./styles";
 import memories from "../../images/memories.png";
-import { AppBar, Avatar, Button, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Avatar, Button, Fade, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import decode from "jwt-decode";
@@ -49,9 +49,10 @@ const Nav = () => {
     <AppBar className={classes.appBar} position="static" color="ingerit">
       <div className="{classes.brandContainer}">
         <Typography component={Link} className={classes.heading} to="/" align="center" variant="h2" align="center">
-          My Blog
+          Howard's Blog
         </Typography>
-        <img className={classes.image} src={memories} alt="memories" height="60" />
+
+        {/* <img className={classes.image} src={memories} alt="memories" height="60" /> */}
       </div>
       <Toolbar className={classes.toolbar}>
         {user ? (

@@ -5,10 +5,18 @@ import mongoose from "mongoose";
 // https://www.restapitutorial.com/httpstatuscodes.html
 
 export const getPosts = async (req, res) => {
+  const { page } = req.query;
+
   try {
-    const postMessage = await PostMessage.find();
+    const LIMIT = 8;
+    // req.query 會將frond-end 拎到query轉做string，依家要強制轉返做number
+    // get the starting index of every page
+    const startIndex = (Number(page) - 1) * LIMIT;
+    const total = await PostMessage.countDocuments({});
+
+    const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
     // console.log(postMessage);
-    res.status(200).json(postMessage);
+    res.status(200).json({ data: posts, currentPage: Number(page), numberofPages: Math.ceil(total / LIMIT) });
   } catch (err) {
     console.log(err);
   }

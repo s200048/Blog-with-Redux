@@ -6,11 +6,11 @@ import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH } from "../constants
 // Action Creators
 // 因為axios 係 async fn ，Thunk 要係fn 後邊再加一個async fn 去dispatch 佢
 // Thunk Motivation
-export const getPosts = () => async (dispatch) => {
+export const getPosts = (page) => async (dispatch) => {
   try {
     // 係api 拎到response，係response 入邊一定有data object，data = posts
-    const { data } = await api.fetchPosts();
-    // console.log(data);
+    const { data } = await api.fetchPosts(page);
+    console.log(data);
     dispatch({ type: FETCH_ALL, payload: data });
   } catch (error) {
     console.log(error.message);
