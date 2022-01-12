@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Grow, Grid, Button, Paper, TextField, AppBar } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { getPosts } from "../../actions/posts";
+import { getPostBySearch, getPosts } from "../../actions/posts";
 import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
 import { mergeClasses } from "@material-ui/styles";
@@ -44,8 +44,12 @@ const Home = () => {
   const handleAdd = (tag) => setTags([...tags, tag]);
   const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete));
   const searchPost = () => {
-    if (search) {
+    if (search.trim() || tags) {
       // dispatch --> fetch search function
+      // e.g. [europe, usa] --> "europe,usa"
+      dispatch(getPostBySearch({ search, tags: tags.join(",") }));
+      // In order to send to someone only the specific search item
+      history.push(`/posts/search?searchQuery=${search || "none"}&tags=${tags.join(",")}`);
     } else {
       history.push("/");
     }

@@ -1,5 +1,5 @@
 import * as api from "../api";
-import { FETCH_ALL, CREATE, UPDATE, DELETE } from "../constants/actionTypes";
+import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH } from "../constants/actionTypes";
 // import all things from the actions as api
 // able the use the variable in api
 
@@ -53,6 +53,18 @@ export const likePost = (id) => async (dispatch) => {
     const { data } = await api.likePost(id);
     // console.log(data);
     dispatch({ type: UPDATE, payload: data });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getPostBySearch = (searchQuery) => async (dispatch) => {
+  try {
+    const {
+      data: { data },
+    } = await api.fetchPostsBySearch(searchQuery);
+    console.log(data);
+    dispatch({ type: FETCH_BY_SEARCH, payload: data });
   } catch (err) {
     console.log(err);
   }

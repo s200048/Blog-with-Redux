@@ -55,13 +55,16 @@ export const updatePosts = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-  const { id: _id } = req.params;
+  const { id } = req.params;
 
   try {
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("No post with that id");
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send("No post with that id");
 
-    const deletedPost = await PostMessage.deleteOne({ id: _id });
-    res.json(`${deletedPost} has been deleted`);
+    // console.log(req.params);
+    // console.log(_id);
+    const deletedPost = await PostMessage.deleteOne({ _id: id });
+    // console.log(deletedPost);
+    res.json(`${id} has been deleted`);
   } catch (err) {
     console.log(err);
   }
@@ -103,5 +106,30 @@ export const likePost = async (req, res) => {
     res.json(updatedPost);
   } catch (err) {
     console.log(err);
+  }
+};
+
+// Query --> /posts?page = 1 --> page = 1
+// Params --> /posts/:id --> id = ?123
+
+export const getPostsBySearch = async (req, res) => {
+  const { searchQuery, tags } = req.query;
+  // console.log(req.query);
+  // console.log(searchQuery);
+  // console.log(tags);
+
+  try {
+    // 令 Test = test = TEST  --> All posts match search result
+    const title = new RegExp(searchQuery, "i");
+    // console.log(title);
+
+    // Find all posts that match those criteria ($or) --> 1 is title, 2 is one of the tags ($in in the array of tags equal to tags)
+    const posts = await PostMessage.find({ $or: [{ title }, { tags: { $in: tags.split(",") } }] });
+    console.log(posts);
+
+    res.json({ data: posts });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
   }
 };
