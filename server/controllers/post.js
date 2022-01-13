@@ -13,6 +13,7 @@ export const getPosts = async (req, res) => {
     // get the starting index of every page
     const startIndex = (Number(page) - 1) * LIMIT;
     const total = await PostMessage.countDocuments({});
+    // console.log(total);
 
     const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
     // console.log(postMessage);
@@ -26,7 +27,7 @@ export const createPost = async (req, res) => {
   const post = req.body;
 
   const newPost = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() });
-
+  console.log(newPost);
   try {
     await newPost.save();
     res.status(201).json(newPost);
