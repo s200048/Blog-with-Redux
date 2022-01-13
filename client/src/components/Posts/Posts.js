@@ -7,11 +7,17 @@ import { CircularProgress, Grid } from "@material-ui/core";
 const Posts = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
   // 要destructing 先拎到data，因為係reducer 入邊 merge咗幾個Object
-  const { posts } = useSelector((state) => state.posts); // [] --> {isLoading, post:[]};
+  const { posts, isLoading } = useSelector((state) => state.posts); // 以前 [] --> 依家 {isLoading, post:[]};
 
   // console.log(posts);
-  return !posts?.length ? (
-    <CircularProgress />
+
+  if (!posts.length && !isLoading) return "No Posts";
+
+  return isLoading ? (
+    <>
+      <CircularProgress />
+      <h1>Loading</h1>
+    </>
   ) : (
     <Grid className={classes.continer} container alignItems="stretch" spacing={3}>
       {posts.map((post) => (
