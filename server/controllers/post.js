@@ -22,6 +22,19 @@ export const getPosts = async (req, res) => {
     console.log(err);
   }
 };
+export const getPost = async (req, res) => {
+  const { id } = req.params;
+  console.log(req.params);
+  console.log(id);
+
+  try {
+    const post = await PostMessage.findById(id);
+    res.status(200).json(post);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
+};
 
 export const createPost = async (req, res) => {
   const post = req.body;

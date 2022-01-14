@@ -1,5 +1,5 @@
 import * as api from "../api";
-import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH, START_LOADING, END_LOADING } from "../constants/actionTypes";
+import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, FETCH_POST } from "../constants/actionTypes";
 // import all things from the actions as api
 // able the use the variable in api
 
@@ -15,7 +15,22 @@ export const getPosts = (page) => async (dispatch) => {
     dispatch({ type: FETCH_ALL, payload: data });
     dispatch({ type: END_LOADING });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+  }
+  //   const action = { type: "FETCH_ALL", payload: [] };
+  //   dispatch(action);
+};
+
+export const getPost = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING });
+    // 係api 拎到response，係response 入邊一定有data object，data = posts
+    const { data } = await api.fetchPost(id);
+    console.log(data);
+    dispatch({ type: FETCH_POST, payload: data });
+    dispatch({ type: END_LOADING });
+  } catch (error) {
+    console.log(error);
   }
   //   const action = { type: "FETCH_ALL", payload: [] };
   //   dispatch(action);

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import useStyles from "./poststyles";
-import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@material-ui/core";
+import { Button, ButtonBase, Card, CardActions, CardContent, CardMedia, Typography } from "@material-ui/core";
 
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
@@ -9,9 +9,11 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { getPosts, deletePost, likePost } from "../../../actions/posts";
+import { useHistory } from "react-router-dom";
 
 const Post = ({ post, currentId, setCurrentId }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -28,6 +30,10 @@ const Post = ({ post, currentId, setCurrentId }) => {
     if (window.confirm(`Are you sure to delete ${post.title}?`)) {
       dispatch(deletePost(post._id));
     }
+  };
+  console.log(post._id);
+  let openPost = () => {
+    history.push(`/posts/${post._id}`);
   };
 
   const Likes = () => {
@@ -55,6 +61,7 @@ const Post = ({ post, currentId, setCurrentId }) => {
 
   return (
     <Card className={classes.card} raised elevation={6}>
+      {/* <ButtonBase className={classes.cardActions} onClick={openPost} component="span" name="test"></ButtonBase> */}
       <CardMedia className={classes.media} image={post.selectedFile} title={post.title} />
       <div className={classes.overlay}>
         <Typography variant="h6">{post.name}</Typography>
@@ -67,6 +74,7 @@ const Post = ({ post, currentId, setCurrentId }) => {
           </Button>
         )}
       </div>
+
       <div className={classes.details}>
         <Typography variant="body2" color="textSecondary">
           {post.tags.map((tag) => `#${tag}`)}
@@ -80,12 +88,17 @@ const Post = ({ post, currentId, setCurrentId }) => {
         <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
           {post.message}
         </Typography>
+        <Button variant="contained" size="small" color="inherit" onClick={openPost}>
+          Click for more
+        </Button>
       </CardContent>
+
       <CardActions className={classes.cardActions}>
         <Button size="small" color="primary" disable={!user?.result} onClick={likeHandler}>
           <Likes />
           {post.likeCount}
         </Button>
+
         {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
           <Button size="small" color="primary" onClick={deletedHandler}>
             <DeleteIcon fontSize="small" />
