@@ -22,10 +22,11 @@ export const getPosts = async (req, res) => {
     console.log(err);
   }
 };
+
 export const getPost = async (req, res) => {
   const { id } = req.params;
-  console.log(req.params);
-  console.log(id);
+  // console.log(req.params);
+  // console.log(id);
 
   try {
     const post = await PostMessage.findById(id);

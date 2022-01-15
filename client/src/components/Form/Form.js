@@ -4,14 +4,16 @@ import useStyles from "./formstyles";
 import FileBase from "react-file-base64";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, updatePost } from "../../actions/posts";
+import { useHistory } from "react-router-dom";
 
 const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({ title: "", message: "", tags: "", selectedFile: "" });
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
+  const history = useHistory();
 
-  const post = useSelector((state) => (currentId ? state.posts.find((p) => p._id === currentId) : null));
+  const post = useSelector((state) => (currentId ? state.posts.posts.find((p) => p._id === currentId) : null));
   // console.log(classes);
 
   // console.log(post);
@@ -27,7 +29,7 @@ const Form = ({ currentId, setCurrentId }) => {
       console.log(postData);
       if (window.confirm(`Are you confirmed to update?`)) return dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
     } else {
-      dispatch(createPost({ ...postData, name: user?.result?.name }));
+      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
     }
 
     clear();

@@ -31,7 +31,9 @@ const Post = ({ post, currentId, setCurrentId }) => {
       dispatch(deletePost(post._id));
     }
   };
-  console.log(post._id);
+
+  // console.log(post._id);
+
   let openPost = () => {
     history.push(`/posts/${post._id}`);
   };

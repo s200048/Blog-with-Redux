@@ -24,7 +24,6 @@ export const getPosts = (page) => async (dispatch) => {
 export const getPost = (id) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
-    // 係api 拎到response，係response 入邊一定有data object，data = posts
     const { data } = await api.fetchPost(id);
     console.log(data);
     dispatch({ type: FETCH_POST, payload: data });
@@ -36,10 +35,12 @@ export const getPost = (id) => async (dispatch) => {
   //   dispatch(action);
 };
 
-export const createPost = (post) => async (dispatch) => {
+export const createPost = (post, history) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.createPost(post);
+    history.push(`/posts/${data._id}`);
+
     dispatch({ type: CREATE, payload: data });
     dispatch({ type: END_LOADING });
   } catch (err) {

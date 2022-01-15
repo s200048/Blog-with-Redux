@@ -3,7 +3,7 @@ import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getPost } from "../../actions/posts";
+import { getPost, getPostBySearch } from "../../actions/posts";
 import useStyles from "./styles";
 
 const PostDetails = () => {
@@ -15,11 +15,35 @@ const PostDetails = () => {
 
   console.log(id);
   console.log(post);
+  console.log(posts);
 
   useEffect(() => {
     dispatch(getPost(id));
   }, [id]);
 
+  useEffect(() => {
+    if (post) {
+      dispatch(getPostBySearch({ search: "none", tags: post?.tags.join(",") }));
+    }
+  }, [post]);
+
+  if (!post) return null;
+
+  if (isLoading) {
+    return (
+      <Paper elevation={6} className={classes.loadingPaper}>
+        <CircularProgress size="7em" />
+      </Paper>
+    );
+  }
+
+  const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
+  console.log(recommendedPosts);
+
+  const openPost = (_id) => {
+    history.push(`/posts/${_id}`);
+    // console.log(_id);
+  };
   return (
     <Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
       <div className={classes.card}>
@@ -49,23 +73,33 @@ const PostDetails = () => {
           <img className={classes.media} src={post.selectedFile || "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"} alt={post.title} />
         </div>
       </div>
-      {/* {!!recommendedPosts.length && (
-      <div className={classes.section}>
-        <Typography gutterBottom variant="h5">You might also like:</Typography>
-        <Divider />
-        <div className={classes.recommendedPosts}>
-          {recommendedPosts.map(({ title, name, message, likes, selectedFile, _id }) => (
-            <div style={{ margin: '20px', cursor: 'pointer' }} onClick={() => openPost(_id)} key={_id}>
-              <Typography gutterBottom variant="h6">{title}</Typography>
-              <Typography gutterBottom variant="subtitle2">{name}</Typography>
-              <Typography gutterBottom variant="subtitle2">{message}</Typography>
-              <Typography gutterBottom variant="subtitle1">Likes: {likes.length}</Typography>
-              <img src={selectedFile} width="200px" />
-            </div>
-          ))}
+      {!!recommendedPosts.length && (
+        <div className={classes.section}>
+          <Typography gutterBottom variant="h5">
+            You might also like:
+          </Typography>
+          <Divider />
+          <div className={classes.recommendedPosts}>
+            {recommendedPosts.map(({ title, name, message, likes, selectedFile, _id }) => (
+              <div style={{ margin: "20px", cursor: "pointer" }} onClick={() => openPost(_id)} key={_id}>
+                <Typography gutterBottom variant="h6">
+                  {title}
+                </Typography>
+                <Typography gutterBottom variant="subtitle2">
+                  {name}
+                </Typography>
+                <Typography gutterBottom variant="subtitle2">
+                  {message}
+                </Typography>
+                <Typography gutterBottom variant="subtitle1">
+                  Likes: {likes.length}
+                </Typography>
+                <img src={selectedFile} width="200px" />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    )} */}
+      )}
     </Paper>
   );
 };
