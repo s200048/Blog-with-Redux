@@ -27,7 +27,13 @@ const PostDetails = () => {
     }
   }, [post]);
 
-  if (!post) return null;
+  if (!post) {
+    return (
+      <Paper elevation={6} className={classes.loadingPaper}>
+        <h1>Post not find!</h1>
+      </Paper>
+    );
+  }
 
   if (isLoading) {
     return (

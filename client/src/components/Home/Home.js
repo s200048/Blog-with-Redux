@@ -14,6 +14,7 @@ import ChipInput from "material-ui-chip-input";
 
 import useStyles from "./styles";
 
+// 搵到現時嘅Search query
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -25,6 +26,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const query = useQuery();
   const history = useHistory();
+  // declair 兩種要search query 情況
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
   const classes = useStyles();
@@ -33,10 +35,17 @@ const Home = () => {
   //   dispatch(getPosts());
   // }, [currentId, dispatch]);
 
+  // const location = useLocation();
+  // console.log(location);
+  // console.log(history);
+  // console.log(typeof page);
+  // console.log(query);
+
   const handleKeyPress = (e) => {
-    if (e.keyCode === 13) {
+    if (e.charCode === 13) {
       //saearch post
       // key code 13 --> Enter
+      // keyCode is deprecated
       searchPost();
     }
   };
@@ -44,6 +53,10 @@ const Home = () => {
   const handleAdd = (tag) => setTags([...tags, tag]);
   const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete));
   const searchPost = () => {
+    // if (search.trim() === null || tags.length < 0) {
+    //   history.push("/");
+    // } else
+
     if (search.trim() || tags) {
       // dispatch --> fetch search function
       // e.g. [europe, usa] --> "europe,usa"

@@ -30,6 +30,8 @@ export const getPost = (id) => async (dispatch) => {
     dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
+    console.log(error.response);
+    return error.response;
   }
   //   const action = { type: "FETCH_ALL", payload: [] };
   //   dispatch(action);
@@ -80,6 +82,7 @@ export const likePost = (id) => async (dispatch) => {
 
 export const getPostBySearch = (searchQuery) => async (dispatch) => {
   try {
+    console.log(searchQuery);
     dispatch({ type: START_LOADING });
     const {
       data: { data },

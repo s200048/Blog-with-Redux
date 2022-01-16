@@ -2,7 +2,7 @@ import React from "react";
 import Post from "./Post/Post";
 import useStyles from "./postSstyles";
 import { useSelector } from "react-redux";
-import { CircularProgress, Grid } from "@material-ui/core";
+import { CircularProgress, Grid, Paper } from "@material-ui/core";
 
 const Posts = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
@@ -11,7 +11,13 @@ const Posts = ({ currentId, setCurrentId }) => {
 
   // console.log(posts);
 
-  if (!posts.length && !isLoading) return "No Posts";
+  if (!posts.length && !isLoading) {
+    return (
+      <Paper elevation={6} className={classes.loadingPaper}>
+        <h1>Posts not find!</h1>
+      </Paper>
+    );
+  }
 
   return isLoading ? (
     <>
